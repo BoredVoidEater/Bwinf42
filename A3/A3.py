@@ -133,7 +133,7 @@ def main():
         startNode: Node = Node((startPos[0], startPos[1], 0))
         endNode: Node = Node((endPos[0], endPos[1], 0))
         #visualize
-        
+
         #run aStar
         path: list[tuple[int, int, int]] = aStar(startNode, endNode, floors)
         x: int
