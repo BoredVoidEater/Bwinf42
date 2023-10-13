@@ -124,8 +124,8 @@ def main():
         x, y = [int(data) for data in rawData[0].split()]
 
         floors = [
-            np.array([[char for char in line] for line in rawData[1 : x + 1]]),
-            np.array([[char for char in line] for line in rawData[x + 2 : 2 * x + 2]]),
+            np.array([list(line) for line in rawData[1 : x + 1]]),
+            np.array([list(line) for line in rawData[x + 2 : 2 * x + 2]]),
         ]
         startPos = np.argwhere(floors[0] == "A")[0]
         endPos = np.argwhere(floors[0] == "B")[0]
