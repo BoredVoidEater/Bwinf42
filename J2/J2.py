@@ -3,7 +3,7 @@ import time
 
 def getExampleImage(path: str):
     """ließt das Beispiel Bild als png am relativen Pfand ein
-    
+
     :param path: Der relative pfad von dem Bild des Beispiels
     :returns: eine liste von Zeilen des Beispiels
     """
@@ -20,7 +20,7 @@ def main():
 
         #print(f"Beispiel {x+1}:")
 
-        
+
         r,g,b = img[0,0]
         Pos = [0,0]
 
@@ -34,7 +34,7 @@ def main():
             r,g,b = img[Pos[0]%width,Pos[1]%height]
 
             msg += chr(r)
-        
+
         print(msg)
 
         rawData.close()
