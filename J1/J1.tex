@@ -1,0 +1,345 @@
+\documentclass[a4paper,10pt,ngerman]{scrartcl}
+\usepackage{babel}
+\usepackage[T1]{fontenc}
+\usepackage[utf8x]{inputenc}
+\usepackage[a4paper,margin=2.5cm,footskip=0.5cm]{geometry}
+
+% Die nächsten vier Felder bitte anpassen:
+\newcommand{\Aufgabe}{Junioraufgabe 1: Wundertüte} % Aufgabennummer und Aufgabennamen angeben
+\newcommand{\TeamId}{00112}                       % Team-ID aus dem PMS angeben
+\newcommand{\TeamName}{10m Dürer gym}                 % Team-Namen angeben
+\newcommand{\Namen}{Finn Degen}           % Namen der Bearbeiter/-innen dieser Aufgabe angeben
+
+ 
+% Kopf- und Fußzeilen
+\usepackage{scrlayer-scrpage, lastpage}
+\setkomafont{pageheadfoot}{\large\textrm}
+\lohead{\Aufgabe}
+\rohead{Team-ID: \TeamId}
+\cfoot*{\thepage{}/\pageref{LastPage}}
+
+% Position des Titels
+\usepackage{titling}
+\setlength{\droptitle}{-1.0cm}
+
+% Für mathematische Befehle und Symbole
+\usepackage{amsmath}
+\usepackage{amssymb}
+
+% Für Bilder
+\usepackage{graphicx}
+
+% Für Algorithmen
+\usepackage{algpseudocode}
+\algnewcommand{\algorithmicand}{\textbf{ and }}
+\algnewcommand{\algorithmicor}{\textbf{ or }}
+\algnewcommand{\OR}{\algorithmicor}
+\algnewcommand{\AND}{\algorithmicand}
+\algnewcommand{\var}{\texttt}
+
+% Für Quelltext
+\usepackage{listings}
+\usepackage{xcolor}
+\definecolor{mygreen}{rgb}{0,0.6,0}
+\definecolor{mygray}{rgb}{0.5,0.5,0.5}
+\definecolor{mymauve}{rgb}{0.58,0,0.82}
+\lstset{
+  keywordstyle=\color{blue},commentstyle=\color{mygreen},
+  stringstyle=\color{mymauve},rulecolor=\color{black},
+  basicstyle=\footnotesize\ttfamily,numberstyle=\tiny\color{mygray},
+  captionpos=b, % sets the caption-position to bottom
+  keepspaces=true, % keeps spaces in text
+  numbers=left, numbersep=5pt, showspaces=false,showstringspaces=true,
+  showtabs=false, stepnumber=2, tabsize=2, title=\lstname
+}
+\lstdefinelanguage{JavaScript}{ % JavaScript ist als einzige Sprache noch nicht vordefiniert
+  keywords={break, case, catch, continue, debugger, default, delete, do, else, finally, for, function, if, in, instanceof, new, return, switch, this, throw, try, typeof, var, void, while, with},
+  morecomment=[l]{//},
+  morecomment=[s]{/*}{*/},
+  morestring=[b]',
+  morestring=[b]",
+  sensitive=true
+}
+\lstset{literate=%
+  {Ö}{{\"O}}1
+  {Ä}{{\"A}}1
+  {Ü}{{\"U}}1
+  {ß}{{\ss}}1
+  {ü}{{\"u}}1
+  {ä}{{\"a}}1
+  {ö}{{\"o}}1
+}
+
+%Für Beispiele im Text
+\usepackage{amsthm}
+\usepackage[framemethod=tikz]{mdframed}
+\newmdtheoremenv[
+  hidealllines=true,
+  leftline=true,
+  innertopmargin=0pt,
+  innerbottommargin=0pt,
+  linewidth=4pt,
+  linecolor=gray!40,
+  innerrightmargin=0pt,
+  innertopmargin=-6pt,
+]{examplei}{Beispiel}
+
+% Diese beiden Pakete müssen zuletzt geladen werden
+\usepackage{hyperref} % Anklickbare Links im Dokument
+\usepackage[nameinlink]{cleveref}
+
+% Daten für die Titelseite
+\title{\textbf{\Huge\Aufgabe}}
+\author{\LARGE Team-ID: \LARGE \TeamId \\\\
+	    \LARGE Team-Name: \LARGE \TeamName \\\\
+	    \LARGE Bearbeiter/-innen dieser Aufgabe: \\ 
+	    \LARGE \Namen\\\\}
+\date{\LARGE\today}
+
+\begin{document}
+
+\maketitle
+\tableofcontents
+
+\vspace{0.5cm}
+
+
+\section{Lösungsidee}
+\label{Lösungsidee}\label{sec:loesungsidee}
+Wir haben zwei Datenfelder, 
+\begin{itemize}
+  \item \emph{Hashmap: Games}: die die Anzahl an Spielen die von jedem Typ vorhanden sind speichert
+  \item \emph{Array: Bags}: das für jede Tüte eine solche Spiel-Anzahl Hashmap speichert, wobei am Anfang alle Anzahlen auf 0 gesetzt werden
+\end{itemize}
+\begin{examplei}
+Wenn die Spieleverteilung 1x Spiel 0, 2x Spiel 1, 2x Spiel 2 ist und es 3 Tüten gibt:\\
+H1 = [0:1,1:2,2:2]\\
+A1 = [\{0:0,1:0,2:0\},\{0:0,1:0,2:0\},\{0:0,1:0,2:0\}]
+\end{examplei}
+Nun versuchen wir erst jede Anzahl in \emph{H1} durch die Anzahl an Tüten insgesammt zu teilen. Das was aufgeht geben wir jeder Tüte.
+Dann bleibt noch der Rest der Division, falls es sich die Anzahl nicht gerade hat teilen lassen. Also fügen wir jeweils ein Spiel zu jeder Tüte hinzu, zu der Tüten die am wenigsten voll sind zuerst, bis der Rest aufgebraucht ist.
+
+\clearpage
+\section{Umsetzung}\label{sec:umsetzung}
+Der folgende Pseudocode beschreibt den Lösungsalgorithmus, wobei n die Anzahl der Tüten und H1, A1 wie in \cref{sec:loesungsidee}
+\begin{algorithmic}
+\For {$\var{game_key, game_amount} \in \var{Games}$}
+  \State $\var{evenly_distributable} \gets \Call{integer_division}{\var{game_amount},\var{n}}$
+  \State $\var{extra_times} \gets \Call{modulo}{\var{game_amount},\var{n}}$
+  \For {$\var{bag} \in \var{Bags}$}
+    \State $\var{bag[game_key]} \gets \var{bag[game_key]} + \var{evenly_distributable}$
+  \EndFor
+
+  \State $\var{Bags} \gets \Call{SortedEmptiesToFullest}{Bags}$
+
+  \For{$\var{i} \gets 0$ to $\var{extra_times}$}
+  \State $\var{Bags[i][game_key]} \gets \var{Bags[i][game_key]} + 1$
+  \EndFor
+
+\EndFor
+\end{algorithmic}
+
+\section{Beispiele}
+Im folgenden wird das Programm mit allen Beispielaufgaben ausgeführt
+\paragraph{Beispiel 1}
+Da diese Lösung genau der Verteilung im Musterbild entrspricht, muss sie richtig sein.
+\begin{lstlisting}[frame=tb]
+Bei der folgenden Lösung unterscheiden sich die Gesamtzahlen der Spiele zwischen je zwei 
+Tüten um höchstens 1
+Tüte 1:  1 mal Spiel A, 1 mal Spiel B, 1 mal Spiel C
+Tüte 2:  1 mal Spiel A, 2 mal Spiel B, 1 mal Spiel C
+Tüte 3:  2 mal Spiel A, 1 mal Spiel B
+\end{lstlisting}
+
+\paragraph{Beispiel 2}
+Auch diese Lösung muss richtig sein, da hier alles aufteilbar ist und das Programm auch alles aufgeteilt hat.
+\begin{lstlisting}[frame=tb]
+Bei der folgenden Lösung unterscheiden sich die Gesamtzahlen der Spiele zwischen je zwei 
+Tüten um höchstens 0
+Tüte 1:  3 mal Spiel A, 1 mal Spiel B, 2 mal Spiel C
+Tüte 2: wie Tüte 1
+Tüte 3: wie Tüte 1
+...
+Tüte 6: wie Tüte 1
+\end{lstlisting}
+
+
+\paragraph{Beispiel 3}
+Auch diese Lösung ist richtig da sich alle Spiele zu 27 addieren $\rightarrow \frac{27}{9}=3 \rightarrow$ jeder bekommt 3 Spiele
+\begin{lstlisting}[frame=tb]
+Bei der folgenden Lösung unterscheiden sich die Gesamtzahlen der Spiele zwischen je zwei 
+Tüten um höchstens 0
+Tüte 1:  1 mal Spiel A, 1 mal Spiel B, 1 mal Spiel D
+Tüte 2: wie Tüte 1
+Tüte 3: wie Tüte 1
+...
+Tüte 5: wie Tüte 1
+Tüte 6:  1 mal Spiel A, 1 mal Spiel B, 1 mal Spiel C
+Tüte 7: wie Tüte 6
+Tüte 8: wie Tüte 6
+Tüte 9:  2 mal Spiel A, 1 mal Spiel B
+\end{lstlisting}
+
+\paragraph{Beispiel 4}
+Auch diese Lösung ist richtig da sich alle Spiele zu 22 addieren $\rightarrow \frac{22}{11}=2 \rightarrow$ jeder bekommt 2 Spiele
+\begin{lstlisting}[frame=tb]
+Bei der folgenden Lösung unterscheiden sich die Gesamtzahlen der Spiele zwischen je zwei 
+Tüten um höchstens 0
+Tüte 1:  1 mal Spiel B, 1 mal Spiel E
+Tüte 2:  1 mal Spiel B, 1 mal Spiel D
+Tüte 3: wie Tüte 2
+Tüte 4:  1 mal Spiel B, 1 mal Spiel C
+Tüte 5: wie Tüte 4
+Tüte 6: wie Tüte 4
+...
+Tüte 9: wie Tüte 4
+Tüte 10:  1 mal Spiel A, 1 mal Spiel B
+Tüte 11: wie Tüte 10
+\end{lstlisting}
+
+\paragraph{Beispiel 5}
+Da sich alle Spiele zu 872 addieren $\rightarrow \frac{872}{11}\approx51.3 \rightarrow$ entsteht eine maximale Differenz von 1 zwischen je zwei Tüten
+\begin{lstlisting}[frame=tb,breaklines=true]
+Bei der folgenden Lösung unterscheiden sich die Gesamtzahlen der Spiele zwischen je zwei 
+Tüten um höchstens 1
+Tüte 1:  2 mal Spiel A, 6 mal Spiel B, 2 mal Spiel C, 5 mal Spiel D, 31 mal Spiel E, 6 mal Spiel F
+Tüte 2: wie Tüte 1
+Tüte 3:  1 mal Spiel A, 7 mal Spiel B, 2 mal Spiel C, 6 mal Spiel D, 30 mal Spiel E, 6 mal Spiel F
+Tüte 4: wie Tüte 3
+Tüte 5:  1 mal Spiel A, 7 mal Spiel B, 2 mal Spiel C, 6 mal Spiel D, 30 mal Spiel E, 5 mal Spiel F
+Tüte 6: wie Tüte 5
+Tüte 7: wie Tüte 5
+...
+Tüte 11: wie Tüte 5
+Tüte 12:  2 mal Spiel A, 6 mal Spiel B, 2 mal Spiel C, 6 mal Spiel D, 30 mal Spiel E, 5 mal Spiel F
+Tüte 13: wie Tüte 12
+Tüte 14:  1 mal Spiel A, 7 mal Spiel B, 3 mal Spiel C, 5 mal Spiel D, 30 mal Spiel E, 5 mal Spiel F
+Tüte 15: wie Tüte 14
+Tüte 16: wie Tüte 14
+Tüte 17:  1 mal Spiel A, 6 mal Spiel B, 3 mal Spiel C, 6 mal Spiel D, 31 mal Spiel E, 5 mal Spiel F
+\end{lstlisting}
+
+\paragraph{Beispiel 6}
+Die Lösung für Beispiel 6
+\begin{lstlisting}[frame=tb,breaklines=true]
+Bei der folgenden Lösung unterscheiden sich die Gesamtzahlen der Spiele zwischen je zwei 
+Tüten um höchstens 1
+Tüte 1:  1 mal Spiel A, 1 mal Spiel C, 1 mal Spiel D, 2 mal Spiel E, 1 mal Spiel F, 2 mal Spiel G, 1 mal Spiel J, 2 mal Spiel K, 1 mal Spiel L, 2 mal Spiel O, 2 mal Spiel P, 1 mal Spiel Q, 1 mal Spiel R, 1 mal Spiel S, 1 mal Spiel T, 2 mal Spiel V, 2 mal Spiel W
+Tüte 2: wie Tüte 1
+Tüte 3:  1 mal Spiel A, 1 mal Spiel C, 2 mal Spiel D, 1 mal Spiel E, 1 mal Spiel F, 2 mal Spiel G, 1 mal Spiel J, 2 mal Spiel K, 1 mal Spiel L, 2 mal Spiel O, 2 mal Spiel P, 1 mal Spiel Q, 1 mal Spiel R, 1 mal Spiel S, 1 mal Spiel T, 2 mal Spiel V, 2 mal Spiel W
+Tüte 4: wie Tüte 3
+Tüte 5: wie Tüte 3
+...
+Tüte 11: wie Tüte 3
+Tüte 12:  1 mal Spiel A, 2 mal Spiel C, 1 mal Spiel D, 1 mal Spiel E, 2 mal Spiel G, 1 mal Spiel H, 1 mal Spiel I, 1 mal Spiel J, 1 mal Spiel K, 1 mal Spiel L, 2 mal Spiel O, 2 mal Spiel P, 1 mal Spiel Q, 1 mal Spiel R, 1 mal Spiel S, 1 mal Spiel T, 2 mal Spiel V, 2 mal Spiel W
+Tüte 13: wie Tüte 12
+Tüte 14: wie Tüte 12
+...
+Tüte 18: wie Tüte 12
+Tüte 19:  1 mal Spiel B, 2 mal Spiel C, 1 mal Spiel D, 1 mal Spiel E, 1 mal Spiel F, 1 mal Spiel G, 1 mal Spiel H, 1 mal Spiel I, 1 mal Spiel K, 1 mal Spiel L, 1 mal Spiel M, 1 mal Spiel N, 1 mal Spiel O, 2 mal Spiel P, 1 mal Spiel Q, 1 mal Spiel R, 1 mal Spiel S, 1 mal Spiel T, 2 mal Spiel V, 2 mal Spiel W
+Tüte 20: wie Tüte 19
+Tüte 21: wie Tüte 19
+Tüte 22:  1 mal Spiel A, 2 mal Spiel C, 1 mal Spiel D, 1 mal Spiel E, 1 mal Spiel F, 1 mal Spiel G, 1 mal Spiel I, 1 mal Spiel J, 2 mal Spiel K, 1 mal Spiel L, 1 mal Spiel N, 1 mal Spiel O, 2 mal Spiel P, 1 mal Spiel Q, 1 mal Spiel R, 1 mal Spiel S, 1 mal Spiel T, 2 mal Spiel V, 2 mal Spiel W
+Tüte 23: wie Tüte 22
+Tüte 24:  2 mal Spiel C, 2 mal Spiel D, 2 mal Spiel E, 1 mal Spiel G, 1 mal Spiel I, 1 mal Spiel J, 2 mal Spiel K, 1 mal Spiel L, 1 mal Spiel N, 1 mal Spiel O, 2 mal Spiel P, 1 mal Spiel Q, 1 mal Spiel R, 1 mal Spiel S, 1 mal Spiel T, 2 mal Spiel V, 2 mal Spiel W
+Tüte 25:  2 mal Spiel C, 2 mal Spiel D, 2 mal Spiel E, 1 mal Spiel G, 1 mal Spiel I, 1 mal Spiel J, 2 mal Spiel K, 1 mal Spiel L, 1 mal Spiel N, 1 mal Spiel O, 2 mal Spiel P, 1 mal Spiel Q, 1 mal Spiel R, 1 mal Spiel S, 1 mal Spiel T, 2 mal Spiel V, 1 mal Spiel W
+Tüte 26: wie Tüte 25
+Tüte 27:  1 mal Spiel B, 2 mal Spiel C, 1 mal Spiel D, 1 mal Spiel E, 1 mal Spiel F, 1 mal Spiel G, 1 mal Spiel H, 1 mal Spiel I, 1 mal Spiel K, 1 mal Spiel L, 1 mal Spiel M, 1 mal Spiel N, 2 mal Spiel O, 1 mal Spiel P, 1 mal Spiel R, 1 mal Spiel S, 2 mal Spiel T, 1 mal Spiel U, 1 mal Spiel V, 1 mal Spiel W
+Tüte 28:  2 mal Spiel C, 2 mal Spiel D, 2 mal Spiel E, 1 mal Spiel G, 1 mal Spiel I, 1 mal Spiel J, 2 mal Spiel K, 1 mal Spiel L, 1 mal Spiel N, 1 mal Spiel O, 2 mal Spiel P, 1 mal Spiel Q, 1 mal Spiel R, 2 mal Spiel T, 1 mal Spiel U, 1 mal Spiel V, 1 mal Spiel W
+Tüte 29: wie Tüte 28
+Tüte 30: wie Tüte 28
+Tüte 31:  1 mal Spiel A, 2 mal Spiel C, 1 mal Spiel D, 1 mal Spiel E, 1 mal Spiel F, 1 mal Spiel G, 1 mal Spiel H, 1 mal Spiel J, 2 mal Spiel K, 1 mal Spiel L, 1 mal Spiel N, 1 mal Spiel O, 2 mal Spiel P, 1 mal Spiel Q, 1 mal Spiel R, 2 mal Spiel T, 1 mal Spiel U, 1 mal Spiel V, 1 mal Spiel W
+Tüte 32:  1 mal Spiel A, 1 mal Spiel C, 2 mal Spiel D, 1 mal Spiel E, 1 mal Spiel F, 2 mal Spiel G, 1 mal Spiel J, 1 mal Spiel K, 1 mal Spiel L, 1 mal Spiel M, 1 mal Spiel N, 2 mal Spiel O, 2 mal Spiel P, 1 mal Spiel R, 2 mal Spiel T, 1 mal Spiel U, 1 mal Spiel V, 1 mal Spiel W
+Tüte 33:  1 mal Spiel B, 2 mal Spiel C, 1 mal Spiel D, 1 mal Spiel E, 1 mal Spiel F, 1 mal Spiel G, 1 mal Spiel H, 1 mal Spiel I, 1 mal Spiel J, 1 mal Spiel K, 1 mal Spiel N, 2 mal Spiel O, 2 mal Spiel P, 1 mal Spiel Q, 1 mal Spiel R, 1 mal Spiel S, 1 mal Spiel T, 1 mal Spiel U, 1 mal Spiel V, 1 mal Spiel W
+Tüte 34: wie Tüte 33
+Tüte 35: wie Tüte 33
+Tüte 36:  1 mal Spiel A, 2 mal Spiel C, 1 mal Spiel D, 1 mal Spiel E, 1 mal Spiel F, 1 mal Spiel G, 1 mal Spiel H, 1 mal Spiel J, 2 mal Spiel K, 1 mal Spiel L, 2 mal Spiel O, 2 mal Spiel P, 1 mal Spiel Q, 1 mal Spiel R, 1 mal Spiel S, 1 mal Spiel T, 1 mal Spiel U, 1 mal Spiel V, 1 mal Spiel W
+Tüte 37: wie Tüte 36
+Tüte 38:  1 mal Spiel A, 1 mal Spiel C, 1 mal Spiel D, 2 mal Spiel E, 1 mal Spiel F, 2 mal Spiel G, 1 mal Spiel J, 2 mal Spiel K, 1 mal Spiel L, 2 mal Spiel O, 2 mal Spiel P, 1 mal Spiel Q, 1 mal Spiel R, 1 mal Spiel S, 1 mal Spiel T, 1 mal Spiel U, 1 mal Spiel V, 1 mal Spiel W
+Tüte 39: wie Tüte 38
+Tüte 40: wie Tüte 38
+...
+Tüte 45: wie Tüte 38
+Tüte 46:  1 mal Spiel A, 1 mal Spiel C, 2 mal Spiel D, 1 mal Spiel E, 1 mal Spiel F, 2 mal Spiel G, 1 mal Spiel J, 1 mal Spiel K, 1 mal Spiel L, 1 mal Spiel M, 1 mal Spiel N, 2 mal Spiel O, 1 mal Spiel P, 2 mal Spiel R, 1 mal Spiel S, 2 mal Spiel T, 1 mal Spiel V, 1 mal Spiel W
+Tüte 47: wie Tüte 46
+Tüte 48: wie Tüte 46
+Tüte 49: wie Tüte 46
+Tüte 50:  1 mal Spiel B, 2 mal Spiel C, 1 mal Spiel D, 1 mal Spiel E, 1 mal Spiel F, 1 mal Spiel G, 1 mal Spiel H, 1 mal Spiel I, 1 mal Spiel K, 1 mal Spiel L, 1 mal Spiel M, 1 mal Spiel N, 2 mal Spiel O, 1 mal Spiel P, 2 mal Spiel R, 1 mal Spiel S, 2 mal Spiel T, 1 mal Spiel V, 1 mal Spiel W
+Tüte 51: wie Tüte 50
+Tüte 52: wie Tüte 50
+...
+Tüte 54: wie Tüte 50
+Tüte 55:  1 mal Spiel B, 2 mal Spiel C, 1 mal Spiel D, 1 mal Spiel E, 1 mal Spiel F, 1 mal Spiel G, 1 mal Spiel H, 1 mal Spiel I, 1 mal Spiel K, 1 mal Spiel L, 1 mal Spiel N, 2 mal Spiel O, 2 mal Spiel P, 1 mal Spiel Q, 1 mal Spiel R, 1 mal Spiel S, 2 mal Spiel T, 1 mal Spiel V, 1 mal Spiel W
+Tüte 56: wie Tüte 55
+Tüte 57: wie Tüte 55
+...
+Tüte 70: wie Tüte 55
+Tüte 71:  1 mal Spiel A, 2 mal Spiel C, 1 mal Spiel D, 1 mal Spiel E, 1 mal Spiel F, 1 mal Spiel G, 1 mal Spiel H, 1 mal Spiel I, 1 mal Spiel K, 1 mal Spiel L, 1 mal Spiel N, 2 mal Spiel O, 2 mal Spiel P, 1 mal Spiel Q, 1 mal Spiel R, 1 mal Spiel S, 2 mal Spiel T, 1 mal Spiel V, 1 mal Spiel W
+Tüte 72: wie Tüte 71
+Tüte 73: wie Tüte 71
+...
+Tüte 76: wie Tüte 71
+Tüte 77:  1 mal Spiel A, 2 mal Spiel C, 1 mal Spiel D, 1 mal Spiel E, 2 mal Spiel G, 1 mal Spiel H, 1 mal Spiel I, 1 mal Spiel J, 1 mal Spiel K, 1 mal Spiel N, 2 mal Spiel O, 2 mal Spiel P, 1 mal Spiel Q, 1 mal Spiel R, 1 mal Spiel S, 2 mal Spiel T, 1 mal Spiel V, 1 mal Spiel W
+Tüte 78:  1 mal Spiel A, 1 mal Spiel C, 2 mal Spiel D, 1 mal Spiel E, 1 mal Spiel F, 1 mal Spiel G, 1 mal Spiel H, 1 mal Spiel I, 1 mal Spiel J, 1 mal Spiel K, 1 mal Spiel N, 2 mal Spiel O, 2 mal Spiel P, 1 mal Spiel Q, 1 mal Spiel R, 1 mal Spiel S, 2 mal Spiel T, 1 mal Spiel V, 1 mal Spiel W
+Tüte 79: wie Tüte 78
+Tüte 80: wie Tüte 78
+...
+Tüte 84: wie Tüte 78
+Tüte 85:  1 mal Spiel B, 2 mal Spiel C, 1 mal Spiel D, 1 mal Spiel E, 1 mal Spiel F, 1 mal Spiel G, 1 mal Spiel H, 1 mal Spiel I, 1 mal Spiel J, 1 mal Spiel K, 1 mal Spiel N, 2 mal Spiel O, 2 mal Spiel P, 1 mal Spiel Q, 1 mal Spiel R, 1 mal Spiel S, 2 mal Spiel T, 1 mal Spiel V, 1 mal Spiel W
+Tüte 86: wie Tüte 85
+Tüte 87: wie Tüte 85
+Tüte 88:  1 mal Spiel B, 2 mal Spiel C, 1 mal Spiel D, 1 mal Spiel E, 1 mal Spiel F, 1 mal Spiel G, 1 mal Spiel H, 1 mal Spiel I, 1 mal Spiel K, 1 mal Spiel L, 1 mal Spiel M, 1 mal Spiel N, 2 mal Spiel O, 1 mal Spiel P, 1 mal Spiel R, 1 mal Spiel S, 2 mal Spiel T, 1 mal Spiel U, 2 mal Spiel V, 1 mal Spiel W
+Tüte 89: wie Tüte 88
+Tüte 90: wie Tüte 88
+...
+Tüte 97: wie Tüte 88
+\end{lstlisting}
+
+\paragraph{Eigenes Beispiel 1}
+In diesem Beispiel ist nur ein Spiel vorhanden und dieses zwei mal. Die ausgegebene Lösung ist also eine der optimalen Lösungen.
+\begin{lstlisting}[frame=tb]
+Bei der folgenden Lösung unterscheiden sich die Gesamtzahlen der Spiele zwischen je zwei
+Tüten um höchstens 1
+Tüte 1:  1 mal Spiel A
+Tüte 2: wie Tüte 1
+Tüte 3:
+\end{lstlisting}
+
+\paragraph{Eigenes Beispiel 2}
+In diesem Beispiel sind drei Spiele je einmal vorhanden. Die ausgegebene Lösung ist also eine der optimalen Lösungen.
+\begin{lstlisting}[frame=tb]
+Bei der folgenden Lösung unterscheiden sich die Gesamtzahlen der Spiele zwischen je zwei
+Tüten um höchstens 0
+Tüte 1:  1 mal Spiel C
+Tüte 2:  1 mal Spiel B
+Tüte 3:  1 mal Spiel A
+\end{lstlisting}
+
+\section{Quellcode}
+Es folgen die wichtigste Teile des Programms, das komplette Programm ist in J1.py.\\
+Zuerst werden folgende Datenfelder deklariert:
+\begin{lstlisting}[language=Python]
+#Games
+count = {i:int(gameCount) for i, gameCount in enumerate(rawData[2:2+k])}
+
+#Bags
+bags = [{i:0 for i in range(k)} for _ in range(n)]
+\end{lstlisting}
+Count ist das Äquivalent für H1, aber in Python deklariert. Wir lesen rawData[2:2+k] ein, da die ersten beiden Zeilen der Daten n und k speichern und wir dann für k Spiele die Anzahlen speichern wollen.
+Bags ist das Äquivalent für A1 \emph{(man könnte auch ein static Array benutzen aber wir nehmen die native Python list)}.
+Nun folgt die Hauptschleife des Programms, welche in \cref{sec:umsetzung} schon erläutert wurde.
+\begin{lstlisting}[language=Python]
+for game in count:
+    evenly_distributable, extra = divmod(count[game],n)
+    #distribute the games enough to give everyone
+    for bag in bags:
+        bag[game] += evenly_distributable
+    
+    #sort bags after whole count of games in them min->max
+    bags = sorted(bags, key=lambda b: sum(b.values()))
+
+    #give bags with less games in them the extra games left from this game first
+    for i in range(extra):
+        bags[i][game] += 1
+\end{lstlisting}
+\end{document}

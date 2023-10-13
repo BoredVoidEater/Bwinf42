@@ -1,0 +1,209 @@
+\documentclass[a4paper,10pt,ngerman]{scrartcl}
+\usepackage{babel}
+\usepackage[T1]{fontenc}
+\usepackage[utf8x]{inputenc}
+\usepackage[a4paper,margin=2.5cm,footskip=0.5cm]{geometry}
+
+% Die nächsten vier Felder bitte anpassen:
+\newcommand{\Aufgabe}{Junioraufgabe 2: St. Egano} % Aufgabennummer und Aufgabennamen angeben
+\newcommand{\TeamId}{00112}                       % Team-ID aus dem PMS angeben
+\newcommand{\TeamName}{10m Dürer gym}                 % Team-Namen angeben
+\newcommand{\Namen}{Finn Degen}           % Namen der Bearbeiter/-innen dieser Aufgabe angeben
+
+ 
+% Kopf- und Fußzeilen
+\usepackage{scrlayer-scrpage, lastpage}
+\setkomafont{pageheadfoot}{\large\textrm}
+\lohead{\Aufgabe}
+\rohead{Team-ID: \TeamId}
+\cfoot*{\thepage{}/\pageref{LastPage}}
+
+% Position des Titels
+\usepackage{titling}
+\setlength{\droptitle}{-1.0cm}
+
+% Für mathematische Befehle und Symbole
+\usepackage{amsmath}
+\usepackage{amssymb}
+
+% Für Bilder
+\usepackage{graphicx}
+
+% Für Algorithmen
+\usepackage{algpseudocode}
+\algnewcommand{\algorithmicand}{\textbf{ and }}
+\algnewcommand{\algorithmicor}{\textbf{ or }}
+\algnewcommand{\OR}{\algorithmicor}
+\algnewcommand{\AND}{\algorithmicand}
+
+\algnewcommand{\var}{\texttt}
+
+\algnewcommand\algorithmicnot{\textbf{not}}
+\algdef{SE}[WHILE]{WhileNot}{EndWhile}[1]{\algorithmicwhile\ \algorithmicnot\ #1\ \algorithmicdo}{\algorithmicend\ \algorithmicwhile}
+
+% Für Quelltext
+\usepackage{listings}
+\usepackage{xcolor}
+\definecolor{mygreen}{rgb}{0,0.6,0}
+\definecolor{mygray}{rgb}{0.5,0.5,0.5}
+\definecolor{mymauve}{rgb}{0.58,0,0.82}
+\lstset{
+  keywordstyle=\color{blue},commentstyle=\color{mygreen},
+  stringstyle=\color{mymauve},rulecolor=\color{black},
+  basicstyle=\footnotesize\ttfamily,numberstyle=\tiny\color{mygray},
+  captionpos=b, % sets the caption-position to bottom
+  keepspaces=true, % keeps spaces in text
+  numbers=left, numbersep=5pt, showspaces=false,showstringspaces=true,
+  showtabs=false, stepnumber=2, tabsize=2, title=\lstname
+}
+\lstdefinelanguage{JavaScript}{ % JavaScript ist als einzige Sprache noch nicht vordefiniert
+  keywords={break, case, catch, continue, debugger, default, delete, do, else, finally, for, function, if, in, instanceof, new, return, switch, this, throw, try, typeof, var, void, while, with},
+  morecomment=[l]{//},
+  morecomment=[s]{/*}{*/},
+  morestring=[b]',
+  morestring=[b]",
+  sensitive=true
+}
+\lstset{literate=%
+  {Ö}{{\"O}}1
+  {Ä}{{\"A}}1
+  {Ü}{{\"U}}1
+  {ß}{{\ss}}1
+  {ü}{{\"u}}1
+  {ä}{{\"a}}1
+  {ö}{{\"o}}1
+}
+
+%Für Beispiele im Text
+\usepackage{amsthm}
+\usepackage[framemethod=tikz]{mdframed}
+\newmdtheoremenv[
+  hidealllines=true,
+  leftline=true,
+  innertopmargin=0pt,
+  innerbottommargin=0pt,
+  linewidth=4pt,
+  linecolor=gray!40,
+  innerrightmargin=0pt,
+  innertopmargin=-6pt,
+]{examplei}{Beispiel}
+
+% Diese beiden Pakete müssen zuletzt geladen werden
+\usepackage{hyperref} % Anklickbare Links im Dokument
+\usepackage[nameinlink]{cleveref}
+
+% Daten für die Titelseite
+\title{\textbf{\Huge\Aufgabe}}
+\author{\LARGE Team-ID: \LARGE \TeamId \\\\
+	    \LARGE Team-Name: \LARGE \TeamName \\\\
+	    \LARGE Bearbeiter/-innen dieser Aufgabe: \\ 
+	    \LARGE \Namen\\\\}
+\date{\LARGE\today}
+
+\begin{document}
+
+\maketitle
+\tableofcontents
+
+\vspace{0.5cm}
+
+
+\section{Lösungsidee}
+\label{Lösungsidee}\label{sec:loesungsidee}
+Für die Lösungsidee kann mann einfach der Beschreibung der Aufabe folgen.
+Während \emph{g} und \emph{b} nicht 0 sind wollen wir unsere Position um \emph{g} und \emph{b} verändern, \emph{r} zu einem Zeichen konvertiert zu einem Lösungs string hinzufügen und die neuen \emph{r,g,b} werte von der neuen Position einlesen.
+
+\section{Umsetzung}\label{sec:umsetzung}
+Der folgende Pseudocode beschreibt den Lösungsalgorithmus
+\begin{algorithmic}
+  \WhileNot {$(\var{g}=0$ \AND $\var{b}=0)$}
+  \State $\var{Pos[0]} \gets \var{Pos[0]} + \var{g}$
+  \State $\var{Pos[1]} \gets \var{Pos[1]} + \var{b}$
+  \State $\var{r} \gets \Call{GetImageAtPositionRGB}{\var{Pos}}[0]$
+  \State $\var{g} \gets \Call{GetImageAtPositionRGB}{\var{Pos}}[1]$
+  \State $\var{b} \gets \Call{GetImageAtPositionRGB}{\var{Pos}}[2]$
+  \State $\var{result} \gets \var{result} + \Call{ToChar}{\var{r}}$
+  \EndWhile
+\end{algorithmic}
+
+\clearpage
+\section{Beispiele}
+Im folgenden wird das Programm mit allen Beispielaufgaben ausgeführt
+\paragraph{Beispiel 1}\mbox{}
+\begin{lstlisting}[frame=tb]
+Hallo Welt
+\end{lstlisting}
+\paragraph{Beispiel 2}\mbox{}
+\begin{lstlisting}[frame=tb]
+Hallo Gloria
+
+Wie treffen uns am Freitag um 15:00 Uhr vor der Eisdiele am Markplatz.
+
+Alle Liebe,
+Juliane
+\end{lstlisting}
+\paragraph{Beispiel 3}\mbox{}
+\begin{lstlisting}[frame=tb]
+Hallo Juliane,
+
+Super, ich werde da sein! Ich freue mich schon auf den riesen Eisbecher mit Erdbeeren.
+
+Bis bald,
+Gloria
+\end{lstlisting}
+\paragraph{Beispiel 4}
+Achtung: Hier habe ich Absätze machen müssen, weil der Platz sonst nicht reicht 
+\begin{lstlisting}[frame=tb,breaklines=true]
+Der Jugendwettbewerb Informatik ist ein Programmierwettbewerb für alle, die erste Programmiererfahrungen sammeln und vertiefen möchten. Programmiert wird mit Blockly, einer Bausteinorientierten Programmiersprache. Vorkenntnisse sind nicht nötig. Um sich mit den Aufgaben des Wettbewerbs vertraut zu machen, empfehlen wir unsere Trainingsseite . Er richtet sich an Schülerinnen und Schüler der Jahrgangsstufen 5 - 13, prinzipiell ist aber eine Teilnahme ab Jahrgangsstufe 3 möglich. Der Wettbewerb besteht aus drei Runden. Die ersten beiden Runden erfolgen online. In der 3. Runde werden zwei Aufgaben gestellt, diese gilt es mit eigenen Programmierwerkzeugen zuhause zu bearbeiten.
+\end{lstlisting}
+\paragraph{Beispiel 5}
+Achtung: Hier habe ich Absätze machen müssen, weil der Platz sonst nicht reicht 
+\begin{lstlisting}[frame=tb,breaklines=true]
+Der Bundeswettbewerb Informatik richtet sich an Jugendliche bis 21 Jahre, vor dem Studium oder einer Berufstätigkeit. Der Wettbewerb beginnt am 1. September, dauert etwa ein Jahr und besteht aus drei Runden. Dabei können die Aufgaben der 1. Runde ohne größere Informatikkenntnisse gelöst werden; die Aufgaben der 2. Runde sind deutlich schwieriger.
+
+Der Bundeswettbewerb ist fachlich so anspruchsvoll, dass die Gewinner i.d.R. in die Studienstiftung des deutschen Volkes aufgenommen werden. Aus den Besten werden die TeilnehmerInnen für die Internationale Informatik-Olympiade ermittelt. Der Bundeswettbewerb ermöglicht den Teilnehmenden, ihr Wissen zu vertiefen und ihre Begabung weiterzuentwickeln. So trägt der Wettbewerb dazu bei, Jugendliche mit besonderem fachlichen Potenzial zu erkennen.
+\end{lstlisting}
+\paragraph{Beispiel 6}
+Achtung: Hier habe ich Absätze machen müssen, weil der Platz sonst nicht reicht 
+\begin{lstlisting}[frame=tb,breaklines=true]
+Bonn
+
+Die Bundesstadt Bonn (im Latein der Humanisten Bonna) ist eine kreisfreie Großstadt im Regierungsbezirk Köln im Süden des Landes Nordrhein-Westfalen und Zweitregierungssitz der Bundesrepublik Deutschland. Mit 336.465 Einwohnern (31. Dezember 2022) zählt Bonn zu den zwanzig größten Städten Deutschlands. Bonn gehört zu den Metropolregionen Rheinland und Rhein-Ruhr sowie zur Region Köln/Bonn. Die Stadt an beiden Ufern des Rheins war von 1949 bis 1973 provisorischer Regierungssitz und von 1973 bis 1990 Bundeshauptstadt und bis 1999 Regierungssitz Deutschlands, danach wurde sie zweiter Regierungssitz. Die Vereinten Nationen unterhalten seit 1951 hier einen Sitz.
+
+Bonn kann auf eine mehr als 2000-jährige Geschichte zurückblicken, die auf germanische und römische Siedlungen zurückgeht, und ist damit eine der ältesten Städte Deutschlands. Von 1597 bis 1794 war es Haupt- und Residenzstadt des Kurfürstentums Köln. 1770 kam Ludwig van Beethoven hier zur Welt. Im Laufe des 19. Jahrhunderts entwickelte sich die 1818 gegründete Universität Bonn zu einer der bedeutendsten deutschen Hochschulen.
+
+1948/49 tagte in Bonn der Parlamentarische Rat und arbeitete das Grundgesetz für die Bundesrepublik Deutschland aus, deren erster Parlaments- und Regierungssitz Bonn 1949 wurde. In der Folge erfuhr die Stadt eine umfangreiche Erweiterung und wuchs über das neue Parlaments- und Regierungsviertel mit Bad Godesberg zusammen. Daraus resultierte die Neubildung der Stadt durch Zusammenschluss der Städte Bonn, Bad Godesberg, des rechtsrheinischen Beuel und Gemeinden des vormaligen Landkreises Bonn am 1. August 1969.
+
+Nach der Wiedervereinigung 1990 fasste der Bundestag 1991 den Bonn/Berlin-Beschluss, infolge dessen der Parlaments- und Regierungssitz 1999/2000 in die Bundeshauptstadt Berlin und im Gegenzug zahlreiche Bundesbehörden nach Bonn verlegt wurden. Seitdem haben in der Bundesstadt der Bundespräsident, der Bundeskanzler und der Bundesrat einen zweiten Dienstsitz, gemäß dem Berlin/Bonn-Gesetz sechs Bundesministerien ihren ersten Dienstsitz, die anderen acht einen Zweitsitz. Mit dem Namenszusatz Bundesstadt stärkt der Bund den Standort Bonn als Zweitregierungssitz.
+
+Bonn weist als Sitz von 20 Organisationen der Vereinten Nationen (UN) einen hohen Grad internationaler Verflechtung auf, trägt den Titel UN-Stadt und wird häufig als Welthauptstadt für Nachhaltigkeit und Klimaschutz bezeichnet. Zudem sind die beiden DAX-Unternehmen Deutsche Post und Deutsche Telekom gesetzlich hier ansässig.
+
+Besonders wegen der Sitze von Organisationen und Unternehmen wird das Stadtbild neben Kirchtürmen durch mehrere Hochhäuser geprägt. Dies unterstreicht auch die Bedeutung als Büro-Immobilienmarkt mit mehr als vier Millionen Quadratmetern Fläche.
+
+Geographie
+
+...
+
+Brandschutz
+Die Feuerwehr Bonn besteht aus der 1941 gegründeten Berufsfeuerwehr, der 1863 gegründeten Freiwilligen Feuerwehr und der Jugendfeuerwehr, die sich jeweils aus verschiedenen Einheiten mit verschiedenen Wachen zusammensetzen.
+
+Gesundheitswesen
+Die über 15 Krankenhäuser sind über die ganze Stadt verteilt. Den bedeutendsten Betrieb stellt das Universitätsklinikum Bonn dar, das über 30 Kliniken in 12 Abteilungen betreibt. Fast alle sind auf dem Venusberg untergebracht, im restlichen Stadtgebiet bestehen drei weitere Standorte. Eine weitere Großklinik ist die LVR-Klinik Bonn (bis 2009 Rheinische Kliniken Bonn, bis 1997 Rheinische Landesklinik Bonn) des Landschaftsverbandes Rheinland in Bonn-Castell. Seit 2013 besteht mit den GFO Kliniken Bonn ein weiteres Gemeinschaftskrankenhaus.
+
+Justizbehörden
+
+Bonn ist Sitz des Landgerichtes Bonn, dem sechs Amtsgerichte unterstehen, darunter das Amtsgericht Bonn. Daneben sind in der Stadt ein Arbeitsgericht und die Staatsanwaltschaft Bonn ansässig. Das in Bonn beheimatete Bundeszentralregister ist zum 1. Januar 2007 mit der Außenstelle des Bundesjustizministeriums im neugebildeten Bundesamt für Justiz mit Sitz in Bonn aufgegangen. Dort wird unter anderem das Bundesgesetzblatt herausgegeben. Gemäß dem Berlin/Bonn-Gesetz behält das Bundesjustizministerium weiterhin eine Außenstelle mit etwa 30 Mitarbeitern in Bonn.
+
+Arbeitsmarktbehörden
+Bonn ist außerdem Standort der Zentralen Auslands- und Fachvermittlung (ZAV) der Bundesagentur für Arbeit (BA). Im Stadtteil Duisdorf befindet sich der Hauptsitz der ZAV mit ihren bundesweit 18 Standorten.
+
+Quelle: https://de.wikipedia.org/wiki/Bonn
+\end{lstlisting}
+
+
+\section{Quellcode}
+Code erklärung
+\begin{lstlisting}[language=Python]
+    #code
+\end{lstlisting}
+\end{document}
