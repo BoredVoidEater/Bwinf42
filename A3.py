@@ -41,7 +41,7 @@ class Node:
         return self.cost >= __value.cost
 
     def __hash__(self) -> int:
-        return hash(self.position) + hash(self.parent.position) if self.parent else 0
+        return hash(self.position)
 
 
 def heuristic_cost(nodePos: tuple[int, int, int], goalPos: tuple[int, int, int]) -> int:
@@ -152,7 +152,6 @@ def main():
 
         startNode: Node = Node((startPos[0], startPos[1], 0))
         endNode: Node = Node((endPos[0], endPos[1], 0))
-        # visualize
 
         # run aStar
         path: list[tuple[int, int, int]] = a_star(startNode, endNode, floors)
