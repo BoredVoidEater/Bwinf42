@@ -1,15 +1,9 @@
+import os
 import itertools
 
-OWNEXAMPLES = True
+from helper import get_user_input, get_example_txt
 
-
-def get_example_txt(path: str) -> list[str]:
-    """ließt das Beispiel am relativen Pfand ein
-
-    :param path: Der relative pfad von der txt-Datei des Beispiels
-    :returns: eine liste von Zeilen des Beispiels
-    """
-    return [line.strip() for line in open(path).readlines()]
+EXAMPLES_PATH = os.path.join(os.path.dirname(__file__), "A4")
 
 
 def calculate_element(element: str, last_element: str, calculation_table, row_index, column_index):
@@ -57,14 +51,15 @@ def calculate_element(element: str, last_element: str, calculation_table, row_in
 
 def main():
     """Löst die Aufgabe A4 des Bwinf 42"""
+    own_examples, num_examples = get_user_input("nandu", EXAMPLES_PATH)
 
-    for x in range(3, 4):
+    for x in range(0, num_examples):
         # Input
-        if OWNEXAMPLES:
-            raw_data = get_example_txt(f"nanduSelf{x+1}.txt")
+        if own_examples:
+            raw_data = get_example_txt(f"nanduSelf{x+1}.txt", EXAMPLES_PATH)
             print(f"Eigenes Beispiel {x+1}:")
         else:
-            raw_data = get_example_txt(f"nandu{x+1}.txt")
+            raw_data = get_example_txt(f"nandu{x+1}.txt", EXAMPLES_PATH)
             print(f"Beispiel {x+1}:")
 
         raw_data.pop(0)  # not needed
@@ -108,9 +103,9 @@ def main():
                     last_element = calculate_element(element, last_element, calculation_table, row_index, column_index)
 
             # print light output
-            for num_current_L, (row_index, column_index) in enumerate(indecies_l):
+            for num_current_l, (row_index, column_index) in enumerate(indecies_l):
                 print(
-                    f"L{num_current_L+1}: {calculation_table[row_index][column_index]}",
+                    f"L{num_current_l+1}: {calculation_table[row_index][column_index]}",
                     end=" ",
                 )
 
