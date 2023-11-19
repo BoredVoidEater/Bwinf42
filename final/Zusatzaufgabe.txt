@@ -1,0 +1,16 @@
+Um die Website lokal zu starten:
+-py -m http.server or
+-python -m http.server
+im Zusatzaufgabe Ordner
+
+und dann auf angegebene URL gehen
+
+
+Kurze Dokumentation:
+Die Website funktioniert vom Algorithmus her genauso wie mein Python script.
+Das "Menü" besteht aus 3 buttons:
+1. Ein Template auswählen
+2. Den geradigen Blockbau als text exportieren
+3. Einen Blockbau von text importieren
+
+Die Blöcke kann man per Drag and Drop aufs Gitter ziehen und die Gittergröße kannn man mit den Slidern links unten ändern.

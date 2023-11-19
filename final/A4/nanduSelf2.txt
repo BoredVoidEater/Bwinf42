@@ -1,0 +1,5 @@
+3 4
+X  X  Q1  
+X  X  X 
+X  B  B  
+X  X  L1 

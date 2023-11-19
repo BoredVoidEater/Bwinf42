@@ -158,6 +158,11 @@ def main():
         x: int
         y: int
         floor: int
+
+        if not path:
+            print("Kein Weg gefunden")
+            exit(1)
+
         for index, (y, x, floor) in enumerate(path):
             if index == len(path) - 1:
                 continue
