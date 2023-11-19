@@ -23,29 +23,32 @@ def calculate_element(element: str, last_element: str, calculation_table, row_in
                     calculation_table[row_index][column_index] = calculation_table[row_index][column_index - 1] = not (
                         calculation_table[row_index - 1][column_index]
                         and calculation_table[row_index - 1][column_index - 1]
-                    )
+                    )  # NAND
                     element = ""
             case "R":
                 if last_element == "r":
                     calculation_table[row_index][column_index] = calculation_table[row_index][column_index - 1] = not (
                         calculation_table[row_index - 1][column_index]
                     )
+                    # NOT
                     element = ""
             case "r":
                 if last_element == "R":
                     calculation_table[row_index][column_index] = calculation_table[row_index][column_index - 1] = not (
                         calculation_table[row_index - 1][column_index - 1]
                     )
+                    # NOT
                     element = ""
             case "B":
                 if last_element == "B":
                     calculation_table[row_index][column_index] = calculation_table[row_index - 1][column_index]
                     calculation_table[row_index][column_index - 1] = calculation_table[row_index - 1][column_index - 1]
+                    # EQUAL
                     element = ""
 
     if element.startswith("L"):
         calculation_table[row_index][column_index] = calculation_table[row_index - 1][column_index]
-
+        # EQUAL
     return element
 
 
@@ -63,8 +66,8 @@ def main():
             print(f"Beispiel {x+1}:")
 
         raw_data.pop(0)  # not needed
-        table: list[list[str]] = []
-        for row in raw_data:
+        table: list[list[str]] = []  # Pseudocode: BLOCK_TABLE
+        for row in raw_data:  # Pseudocode: AufgabeEinlesenZuBlockArray
             table.append(row.split())
 
         # initialize Qs and Ls
@@ -83,6 +86,7 @@ def main():
 
         for possible_q_combination in possible_q_combinations:
             # this table saves the booleans for the light outputs
+            # Psuedocode: CALC_TABLE
             calculation_table = [[None for _ in range(len(table[0]))] for _ in range(len(table))]
 
             # print Qs
@@ -98,8 +102,11 @@ def main():
             # go trough each row
             # and compute the bool values for the light outputs
             for row_index, _ in enumerate(table):
-                last_element = None
+                last_element = (
+                    None  # last element has to be reset, else it will think that blocks on the edge span over 2 rows
+                )
                 for column_index, element in enumerate(table[row_index]):
+                    # Pseudocode: BerechneBlock
                     last_element = calculate_element(element, last_element, calculation_table, row_index, column_index)
 
             # print light output

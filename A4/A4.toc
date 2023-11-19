@@ -1,0 +1,13 @@
+\babel@toc {ngerman}{}\relax 
+\contentsline {section}{\numberline {1}Lösungsidee}{1}{section.1}%
+\contentsline {subsection}{\numberline {1.1}Identifikation der Blocktypen}{1}{subsection.1.1}%
+\contentsline {subsection}{\numberline {1.2}Iteratives Berechnen der Zustände}{2}{subsection.1.2}%
+\contentsline {section}{\numberline {2}Umsetzung}{3}{section.2}%
+\contentsline {section}{\numberline {3}Beispiele}{3}{section.3}%
+\contentsline {paragraph}{\nonumberline Beispiel 1}{3}{paragraph*.3}%
+\contentsline {paragraph}{\nonumberline Beispiel 2}{3}{paragraph*.5}%
+\contentsline {paragraph}{\nonumberline Beispiel 3}{3}{paragraph*.7}%
+\contentsline {paragraph}{\nonumberline Beispiel 4}{4}{paragraph*.9}%
+\contentsline {paragraph}{\nonumberline Beispiel 5}{4}{paragraph*.11}%
+\contentsline {section}{\numberline {4}Quellcode}{6}{section.4}%
+\providecommand \tocbasic@end@toc@file {}\tocbasic@end@toc@file 
