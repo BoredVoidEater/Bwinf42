@@ -57,7 +57,6 @@ def calculate_element(element: str, last_element: str, calculation_table, row_in
 
 def main():
     """Löst die Aufgabe A4 des Bwinf 42"""
-
     for x in range(3, 4):
         # Input
         if OWNEXAMPLES:
