@@ -9,5 +9,7 @@
 \contentsline {paragraph}{\nonumberline Beispiel 3}{3}{paragraph*.7}%
 \contentsline {paragraph}{\nonumberline Beispiel 4}{4}{paragraph*.9}%
 \contentsline {paragraph}{\nonumberline Beispiel 5}{4}{paragraph*.11}%
+\contentsline {paragraph}{\nonumberline Eigenes Beispiel 1}{6}{paragraph*.13}%
+\contentsline {paragraph}{\nonumberline Eigenes Beispiel 2}{6}{paragraph*.15}%
 \contentsline {section}{\numberline {4}Quellcode}{6}{section.4}%
 \providecommand \tocbasic@end@toc@file {}\tocbasic@end@toc@file 

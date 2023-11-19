@@ -87,7 +87,7 @@ def main():
         for possible_q_combination in possible_q_combinations:
             # this table saves the booleans for the light outputs
             # Psuedocode: CALC_TABLE
-            calculation_table = [[None for _ in range(len(table[0]))] for _ in range(len(table))]
+            calculation_table = [[False for _ in range(len(table[0]))] for _ in range(len(table))]
 
             # print Qs
             for num_of_possible_q, possible_q_value in enumerate(possible_q_combination):

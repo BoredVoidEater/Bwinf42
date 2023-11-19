@@ -1,5 +1,5 @@
-?
-Q1 Q2
-W  W
-W  W
-L1 L2
+3 4
+X  X X  
+X  X  Q1 
+X  B  B  
+X  X  L1 

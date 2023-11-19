@@ -291,6 +291,34 @@ Q1: True Q2: True Q3: True Q4: True Q5: True Q6: False L1: True L2: False L3: Fa
 Q1: True Q2: True Q3: True Q4: True Q5: True Q6: True L1: True L2: False L3: False L4: True L5: True
 \end{lstlisting}
 
+\paragraph{Eigenes Beispiel 1} Dieses Beispiel zeigt, dass auch Input-Lichter die nicht in der ersten Reihe sind funktionieren (In den BWINF Beispielen waren diese immer in der ersten Reihe)
+\begin{lstlisting}[frame=tb]
+Input:
+3 4
+X  X X  
+X  X  Q1 
+X  B  B  
+X  X  L1 
+
+Output:
+Q1: False L1: False
+Q1: True L1: True
+\end{lstlisting}
+
+\paragraph{Eigenes Beispiel 2} Dieses Beispiel zeigt, dass Licht nicht über mehrere Blöcke hinweg leuchten kann. Ich habe mich bewusst dagegen entschieden, da der blaue Block sonst keinen Sinn machen würde.
+\begin{lstlisting}[frame=tb]
+Input:
+3 4
+X  X  Q1  
+X  X  X 
+X  B  B  
+X  X  L1 
+
+Output:
+Q1: False L1: False
+Q1: True L1: False
+\end{lstlisting}
+
 \section{Quellcode}
 \label{Quellcode}\label{sec:quellcode}
 Wir fangen mit der Initialisierung der Variablen wie in \cref{sec:umsetzung} an:
@@ -320,7 +348,7 @@ Nun implementieren wir die Haupt Algorithmus, dies ist der selbe wie in \cref{se
 for possible_q_combination in possible_q_combinations:
   # this table saves the booleans for the light outputs
   # Psuedocode: CALC_TABLE
-  calculation_table = [[None for _ in range(len(table[0]))] for _ in range(len(table))]
+  calculation_table = [[False for _ in range(len(table[0]))] for _ in range(len(table))]
 
   # print Qs
   for num_of_possible_q, possible_q_value in enumerate(possible_q_combination):
