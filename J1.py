@@ -13,7 +13,6 @@ def bag_to_str(bag: dict[int:int], number_of_games: int) -> str:
     :param bag: die Tüte die zum string gemacht wird
     :returns: den string der Tüte
     """
-
     if number_of_games > 25:
         # if there are more than 26 games, we need to use numbers instead of letters for naming them
         bag_unpacked = [f"{bag[game]} mal Spiel {game}" for game in bag if bag[game] != 0]
@@ -28,7 +27,6 @@ def print_output(bags, number_of_games):
     :param bags: Liste aller Tüten mit den Spielen
     :param number_of_games: Anzahl aller Spiele
     """
-
     # This is only used for output formatting and adds "wie Tüte x" if the bag is the same as the one before
     last_matching_bag_index: int = -1
     for i, bag in enumerate(bags):
