@@ -1,0 +1,3 @@
+To run this website locally start a local http server on this folder using either
+py -m http.server or
+python -m http.server

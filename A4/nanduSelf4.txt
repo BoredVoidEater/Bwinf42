@@ -1,0 +1,8 @@
+4 7
+X  Q1 X  X  
+X  L1 Q2 X  
+X  X  L2 X  
+X  X  X  X  
+X  X  X  X  
+X  X  W  W  
+X  X  X  X  
