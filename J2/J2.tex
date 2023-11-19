@@ -110,8 +110,8 @@
 
 \section{Lösungsidee}
 \label{Lösungsidee}\label{sec:loesungsidee}
-Für die Lösungsidee kann mann einfach der Beschreibung der Aufabe folgen.
-Während \emph{g} und \emph{b} nicht 0 sind wollen wir unsere Position um \emph{g} und \emph{b} verändern, \emph{r} zu einem Zeichen konvertiert zu einem Lösungs string hinzufügen und die neuen \emph{r,g,b} werte von der neuen Position einlesen.
+Für die Lösungsidee kann man einfach der Beschreibung der Aufabe folgen.
+Während \emph{g} und \emph{b} nicht 0 sind (wir uns also nicht am Startpixel befinden) wollen wir unsere Position um \emph{g} und \emph{b} verändern, \emph{r} zu einem Zeichen konvertiert zu einem Lösungs string hinzufügen und die neuen \emph{r,g,b} werte von der neuen Position einlesen.
 
 \section{Umsetzung}\label{sec:umsetzung}
 Der folgende Pseudocode beschreibt den Lösungsalgorithmus
@@ -200,10 +200,34 @@ Bonn ist außerdem Standort der Zentralen Auslands- und Fachvermittlung (ZAV) de
 Quelle: https://de.wikipedia.org/wiki/Bonn
 \end{lstlisting}
 
+\paragraph{Eigenes Beispiel 1}
+Das Beispiel das in der Aufgabenstellung gegeben ist.
+\begin{lstlisting}[frame=tb,breaklines=true]
+Hallo
+\end{lstlisting}
+
 
 \section{Quellcode}
-Code erklärung
+Es folgen die wichtigste Teile des Programms, das komplette Programm ist in J2.py
+Zuerst werden die benötigten Variablen initialisiert und die rgb werte sowie die Position werden auf den Pixel links oben gesetzt.
+Zum Nachrichten string wird das erste Zeichen hinzugefügt.
 \begin{lstlisting}[language=Python]
-    #code
+  width, height = raw_data.size
+
+  r, g, b = img[0, 0]
+  pos = [0, 0]
+
+  msg = chr(img[0, 0][0]) 
+\end{lstlisting}
+Nun folgt die Schleife, die den Rest des Bildes ausliest und die Nachricht speichert.
+\begin{lstlisting}[language=Python]
+  while not (g == 0 and b == 0):
+
+      pos[0] += g
+      pos[1] += b
+
+      r, g, b = img[pos[0] % width, pos[1] % height] # GetImageAtPositionRGB() im Pseudocode
+
+      msg += chr(r) # ToChar() im Pseudocode
 \end{lstlisting}
 \end{document}

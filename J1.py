@@ -64,6 +64,8 @@ def print_output(bags, number_of_games):
 
 
 def main():
+    """Löst die Aufgabe J1 des Bwinf 42"""
+
     own_examples, num_examples = get_user_input("wundertuete", EXAMPLES_PATH)
 
     for examples in range(num_examples):

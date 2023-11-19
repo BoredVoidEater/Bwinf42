@@ -110,6 +110,8 @@ def aStar(start: Node, goal: Node, floors) -> list[tuple[int, int, int]]:
 
 
 def main():
+    """Löst die Aufgabe A3 des Bwinf 42"""
+
     for x in range(1):
         if OWNEXAMPLES:
             rawData = getExampleTxt(f"zauberschuleSelf{x}.txt")

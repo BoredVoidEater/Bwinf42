@@ -8,6 +8,8 @@ EXAMPLES_PATH = os.path.join(os.path.dirname(__file__), "J2")
 
 
 def main():
+    """Löst die Aufgabe J2 des Bwinf 42"""
+
     own_examples, num_examples = get_user_input("bild", EXAMPLES_PATH)
     for examples in range(0, num_examples):
         # Input

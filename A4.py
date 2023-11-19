@@ -13,6 +13,15 @@ def get_example_txt(path: str) -> list[str]:
 
 
 def calculate_element(element: str, last_element: str, calculation_table, row_index, column_index):
+    """Berechnet den Wahrheitswehrt für das gegebene Element mit der zusätzlichen Information des letzten Elements. Speichert den Wahrheitswert in calculation_table und gibt das neue letzte Element zurück
+
+    :param element: Das aktuelle Element
+    :param last_element: Das letzte Element
+    :param calculation_table: Die Tabelle mit den Wahrheitswerten. Wird direkt verändert
+    :param row_index: Die aktuelle Zeile
+    :param column_index: Die aktuelle Spalte
+    :returns: Das neue letzte Element
+    """
     if last_element:
         match element:
             case "W":
@@ -47,6 +56,8 @@ def calculate_element(element: str, last_element: str, calculation_table, row_in
 
 
 def main():
+    """Löst die Aufgabe A4 des Bwinf 42"""
+
     for x in range(3, 4):
         # Input
         if OWNEXAMPLES:
