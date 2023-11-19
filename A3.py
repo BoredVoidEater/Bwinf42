@@ -1,22 +1,21 @@
+import os
 import heapq
 import numpy as np
+import sys
 
-OWNEXAMPLES = False
+from helper import get_example_txt, get_user_input
 
-
-# utility
-def getExampleTxt(path: str) -> list[str]:
-    """ließt das Beispiel am relativen Pfand ein
-
-    :param path: Der relative pfad von der txt-Datei des Beispiels
-    :returns: eine liste von Zeilen des Beispiels
-    """
-    return [line.strip() for line in open(path).readlines()]
+EXAMPLES_PATH = os.path.join(os.path.dirname(__file__), "A3")
 
 
 # A*
 class Node:
-    """Eine einfache Node Klasse für backtracking und Cost berechnen, speichert auch die Position"""
+    """Eine einfache Node Klasse für backtracking und Cost berechnen, speichert auch die Position
+
+    :var position: Die Position des Nodes
+    :var parent: Der Parent Node
+    :var cost: Die Kosten um zu diesem Node zu kommen
+    """
 
     def __init__(self, position, parent=None, cost=0):
         self.position = position  # y,x,floor
@@ -45,25 +44,38 @@ class Node:
         return hash(self.position) + hash(self.parent.position) if self.parent else 0
 
 
-def heuristicCost(nodePos: tuple[int, int, int], goalPos: tuple[int, int, int]) -> int:
+def heuristic_cost(nodePos: tuple[int, int, int], goalPos: tuple[int, int, int]) -> int:
+    """Berechnet die Heuristik für die Distanz zwischen zwei Punkten
+
+    :param nodePos: Die Position des aktuellen Nodes
+    :param goalPos: Die Position des Zielnodes
+    :returns: Die estimierten Kosten um von nodePos zu goalPos zu kommen
+    """
     x1, y1, f1 = nodePos
     x2, y2, f2 = goalPos
 
-    return abs(x1 - x2) + abs(y1 - y2) + abs(f1 - f2) * 3  # idk if we should consider floor cost
+    return abs(x1 - x2) + abs(y1 - y2) + abs(f1 - f2) * 3  # floor change cost is 3
 
 
-def getNeighbors(node, floors, goalPos: tuple[int, int, int]):
+def get_neighbors(node, floors, goalPos: tuple[int, int, int]):
+    """Gibt alle Nachbarn eines Nodes zurück
+
+    :param node: Der Node dessen Nachbarn gesucht werden
+    :param floors: Die Etagen der Schule als Karte
+    :param goalPos: Die Position des Zielnodes
+    :returns: Eine Liste aller Nachbarn
+    """
     x, y, f = node.position
     neighbors = []
 
-    for ajacentX, ajacentY in [(0, 1), (0, -1), (1, 0), (-1, 0)]:
-        newX, newY = x + ajacentX, y + ajacentY
-        if floors[f][newX][newY] != "#":
+    for ajacent_x, ajacent_y in [(0, 1), (0, -1), (1, 0), (-1, 0)]:
+        new_x, new_y = x + ajacent_x, y + ajacent_y
+        if floors[f][new_x][new_y] != "#":
             neighbors.append(
                 Node(
-                    (newX, newY, f),
+                    (new_x, new_y, f),
                     parent=node,
-                    cost=node.cost + 1 + heuristicCost((newX, newY, f), goalPos),
+                    cost=node.cost + 1 + heuristic_cost((new_x, new_y, f), goalPos),
                 )
             )
 
@@ -72,14 +84,21 @@ def getNeighbors(node, floors, goalPos: tuple[int, int, int]):
             Node(
                 (x, y, 1 - f),
                 parent=node,
-                cost=node.cost + 3 + heuristicCost((x, y, 1 - f), goalPos),
+                cost=node.cost + 3 + heuristic_cost((x, y, 1 - f), goalPos),
             )
         )  # for two floor 1-f because 0->1 and 1->0
 
     return neighbors
 
 
-def aStar(start: Node, goal: Node, floors) -> list[tuple[int, int, int]]:
+def a_star(start: Node, goal: Node, floors) -> list[tuple[int, int, int]]:
+    """Führt den A* Algorithmus aus
+
+    :param start: Der Startnode
+    :param goal: Der Zielnode
+    :param floors: Die Etagen der Schule als Karte
+    :returns: Der Pfad von start zu goal
+    """
     queque = []
     explored = set()
 
@@ -100,7 +119,7 @@ def aStar(start: Node, goal: Node, floors) -> list[tuple[int, int, int]]:
         # we have now seen this node
         explored.add(curNode)
 
-        for neighbor in getNeighbors(curNode, floors, goal.position):
+        for neighbor in get_neighbors(curNode, floors, goal.position):
             if neighbor in explored:
                 # already seen dont care
                 continue
@@ -111,12 +130,14 @@ def aStar(start: Node, goal: Node, floors) -> list[tuple[int, int, int]]:
 
 def main():
     """Löst die Aufgabe A3 des Bwinf 42"""
-    for x in range(1):
-        if OWNEXAMPLES:
-            rawData = getExampleTxt(f"zauberschuleSelf{x}.txt")
+    own_examples, num_examples = get_user_input("zauberschule", EXAMPLES_PATH)
+
+    for x in range(num_examples):
+        if own_examples:
+            rawData = get_example_txt(f"zauberschuleSelf{x}.txt", EXAMPLES_PATH)
             print(f"Eigenes Beispiel {x+1}:")
         else:
-            rawData = getExampleTxt(f"zauberschule{x}.txt")
+            rawData = get_example_txt(f"zauberschule{x}.txt", EXAMPLES_PATH)
             print(f"Beispiel {x+1}:")
 
         # InputProcessing
@@ -134,7 +155,7 @@ def main():
         # visualize
 
         # run aStar
-        path: list[tuple[int, int, int]] = aStar(startNode, endNode, floors)
+        path: list[tuple[int, int, int]] = a_star(startNode, endNode, floors)
         x: int
         y: int
         floor: int
@@ -144,22 +165,28 @@ def main():
             replace: chr = ""
             if floor != path[index + 1][2]:
                 replace = "!"
-                print(x, y)
-                print(path[index + 1][0])
             elif x - path[index + 1][1] == 1:
                 replace = "<"
             elif x - path[index + 1][1] == -1:
                 replace = ">"
             elif y - path[index + 1][0] == 1:
-                replace = "v"
-            elif y - path[index + 1][0] == -1:
                 replace = "^"
+            elif y - path[index + 1][0] == -1:
+                replace = "v"
 
             if replace != "":
                 floors[floor][y][x] = replace
 
         for floor in floors:
-            print(np.array2string(floor, separator="", formatter={"str_kind": lambda x: x}))
+            print(
+                np.array2string(
+                    floor,
+                    separator="",
+                    formatter={"str_kind": lambda x: x},
+                    threshold=sys.maxsize,
+                    max_line_width=sys.maxsize,
+                )
+            )
 
         print()
 
