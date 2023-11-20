@@ -5,7 +5,7 @@ import sys
 
 from helper import get_example_txt, get_user_input
 
-EXAMPLES_PATH = os.path.join(os.path.dirname(__file__), "A3")
+EXAMPLES_PATH = os.path.dirname(__file__)
 
 
 # A*

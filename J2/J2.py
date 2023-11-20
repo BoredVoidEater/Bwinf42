@@ -4,7 +4,7 @@ import os
 
 from helper import get_user_input, get_example_image
 
-EXAMPLES_PATH = os.path.join(os.path.dirname(__file__), "J2")
+EXAMPLES_PATH = os.path.dirname(__file__)
 
 
 def main():

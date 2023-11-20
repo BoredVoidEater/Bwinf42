@@ -3,7 +3,7 @@ import itertools
 
 from helper import get_user_input, get_example_txt
 
-EXAMPLES_PATH = os.path.join(os.path.dirname(__file__), "A4")
+EXAMPLES_PATH = os.path.dirname(__file__)
 
 
 def calculate_element(element: str, last_element: str, calculation_table, row_index, column_index):

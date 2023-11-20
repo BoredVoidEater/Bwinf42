@@ -4,7 +4,7 @@ import os
 
 from helper import get_user_input, get_example_txt
 
-EXAMPLES_PATH = os.path.join(os.path.dirname(__file__), "J1")
+EXAMPLES_PATH = os.path.dirname(__file__)
 
 
 def bag_to_str(bag: dict[int:int], number_of_games: int) -> str:
